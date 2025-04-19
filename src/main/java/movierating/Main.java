@@ -1,7 +1,12 @@
 package movierating;
 
+import javax.swing.*;
+
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello, World!");
+        SwingUtilities.invokeLater(() -> {
+            LoginPage page = new LoginPage();
+            page.setVisible(true);
+        });
     }
 }
