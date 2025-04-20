@@ -1,9 +1,9 @@
-package movierating;
+package movierating.utils;
 
 import javax.swing.*;
 import java.awt.*;
 
-import static movierating.Constants.ACCENT_COLOR;
+import static movierating.utils.Constants.ACCENT_COLOR;
 
 public class Utils {
     public static JButton createButton(String text) {

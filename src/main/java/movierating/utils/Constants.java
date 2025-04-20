@@ -1,4 +1,4 @@
-package movierating;
+package movierating.utils;
 
 import java.awt.*;
 

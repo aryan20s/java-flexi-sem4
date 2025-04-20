@@ -1,5 +1,7 @@
 package movierating;
 
+import movierating.pages.HomePage;
+
 import javax.swing.*;
 
 public class Main {
