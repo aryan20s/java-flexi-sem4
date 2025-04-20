@@ -4,7 +4,6 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
 import static movierating.utils.Constants.*;
@@ -14,11 +13,13 @@ public class MovieCard extends Card {
     private static final BufferedImage ICON_IMAGE;
 
     static {
+        BufferedImage tempImage = null;
         try {
-            ICON_IMAGE = ImageIO.read(new File("icon.png"));
+            tempImage = ImageIO.read(MovieCard.class.getResource("/movierating/icon.png"));
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.err.println("Warning: Could not load icon.png - " + e.getMessage());
         }
+        ICON_IMAGE = tempImage;
     }
 
     public MovieCard(String movieGenre, String movieRating, String movieName) {
@@ -29,7 +30,14 @@ public class MovieCard extends Card {
         this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         this.setOpaque(false);
 
-        this.add(new JLabel(new ImageIcon(ICON_IMAGE.getScaledInstance(160, 160, Image.SCALE_SMOOTH))));
+        if (ICON_IMAGE != null) {
+            this.add(new JLabel(new ImageIcon(ICON_IMAGE.getScaledInstance(160, 160, Image.SCALE_SMOOTH))));
+        } else {
+            // Fallback if image is missing
+            JLabel placeholder = new JLabel("No Image");
+            placeholder.setPreferredSize(new Dimension(160, 160));
+            this.add(placeholder);
+        }
         this.add(getMovieDetails());
     }
 
@@ -46,19 +54,18 @@ public class MovieCard extends Card {
         JLabel lMovieRating = new JLabel(this.movieRating);
         lMovieRating.setFont(ARIAL.deriveFont(16.0F));
         lMovieRating.setForeground(Color.GRAY);
-        lMovieName.setOpaque(false);
+        lMovieRating.setOpaque(false);
 
         JLabel lMovieGenre = new JLabel(this.movieGenre);
         lMovieGenre.setFont(ARIAL.deriveFont(16.0F));
         lMovieGenre.setForeground(Color.GRAY);
-        lMovieName.setOpaque(false);
+        lMovieGenre.setOpaque(false);
 
         details.add(lMovieName);
         details.add(lMovieGenre);
         details.add(lMovieRating);
         return details;
     }
-
     @Override
     public void onClicked() {
         System.out.println(this.movieName + " clicked.");

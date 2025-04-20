@@ -1,10 +1,13 @@
 package movierating.pages;
 
 import movierating.components.MovieCard;
+import movierating.models.Movie;
+import movierating.services.MovieService;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.util.List;
 
 import static movierating.utils.Constants.PADDING_SIZE;
 
@@ -18,13 +21,19 @@ public class MoviesSubpage {
 
     private static JPanel getMoviesList() {
         JPanel moviesList = new JPanel();
-        moviesList.setLayout(new GridLayout(5, 1, PADDING_SIZE, PADDING_SIZE));
+        moviesList.setLayout(new GridLayout(0, 1, PADDING_SIZE, PADDING_SIZE)); // Dynamic rows, 1 column
         moviesList.setBorder(new EmptyBorder(PADDING_SIZE, PADDING_SIZE - 1, PADDING_SIZE, PADDING_SIZE - 1));
-        moviesList.add(new MovieCard("Action", "♥ 4.3", "Name 1"));
-        moviesList.add(new MovieCard("Thriller", "♥ 4.1", "Name 2"));
-        moviesList.add(new MovieCard("Kids", "♥ 3.7", "Name 3"));
-        moviesList.add(new MovieCard("Comedy", "♥ 4.2", "Name 4"));
-        moviesList.add(new MovieCard("Sci-Fi", "♥ 4.6", "Name 5"));
+
+        // Fetch movies from the database
+        MovieService movieService = new MovieService();
+        List<Movie> movies = movieService.getAllMovies();
+
+        // Add a MovieCard for each movie
+        for (Movie movie : movies) {
+            String ratingText = "♥ " + String.format("%.1f", movie.getRating());
+            moviesList.add(new MovieCard(movie.getGenre(), ratingText, movie.getMovieName()));
+        }
+
         return moviesList;
     }
 }
