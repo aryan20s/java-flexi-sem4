@@ -12,6 +12,7 @@ public class HomePage extends JFrame implements Updatable {
     public static final int W_WIDTH = 900, W_HEIGHT = 600;
     private final JPanel mainPanel;
     private JComponent bookingsSubpage;
+    private JComponent moviesSubpage;
     private final CardLayout cl;
 
     public HomePage() {
@@ -27,7 +28,8 @@ public class HomePage extends JFrame implements Updatable {
         JPanel navBar = new JPanel(new BorderLayout());
         JPanel buttonsPanel = new JPanel();
 
-        mainPanel.add(MoviesSubpage.makeMoviesSubpage(this), "Movies");
+        moviesSubpage = MoviesSubpage.makeMoviesSubpage(this);
+        mainPanel.add(moviesSubpage, "Movies");
         bookingsSubpage = BookingsSubpage.makeBookingsSubpage(this);
         mainPanel.add(bookingsSubpage, "My Bookings");
 
@@ -68,6 +70,10 @@ public class HomePage extends JFrame implements Updatable {
 
     @Override
     public void refreshContents() {
+        mainPanel.remove(moviesSubpage);
+        moviesSubpage = MoviesSubpage.makeMoviesSubpage(this);
+        mainPanel.add(moviesSubpage, "Movies");
+
         mainPanel.remove(bookingsSubpage);
         bookingsSubpage = BookingsSubpage.makeBookingsSubpage(this);
         mainPanel.add(bookingsSubpage, "My Bookings");
