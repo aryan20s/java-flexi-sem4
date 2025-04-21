@@ -60,21 +60,24 @@ public class ReviewingPage extends JFrame {
         JTextField rating = new JTextField(5);
         rating.setFont(Constants.ARIAL);
         rating.setBorder(new LineBorder(Color.BLACK));
-        JTextArea review = new JTextArea();
+        JTextArea review = new JTextArea(10, 30);
+        review.setLineWrap(true);
         review.setFont(Constants.ARIAL);
         review.setBorder(new LineBorder(Color.BLACK));
 
         main.setLayout(new BoxLayout(main, BoxLayout.Y_AXIS));
 
-        JPanel ratingPanel = new JPanel();
-        ratingPanel.add(Utils.createLabel("Rating Score (0-10): ", 20.0F, Color.BLACK));
-        ratingPanel.add(rating);
+        JPanel ratingPanel = new JPanel(new BorderLayout());
+        ratingPanel.add(Utils.createLabel("Rating Score (0-10): ", 20.0F, Color.BLACK), BorderLayout.WEST);
+        ratingPanel.add(rating, BorderLayout.CENTER);
         ratingPanel.setBorder(new EmptyBorder(0, 0, PADDING_SIZE * 4, 0));
         main.add(ratingPanel);
         JLabel lReview = Utils.createLabel("Review (optional): ", 20.0F, Color.BLACK);
         lReview.setBorder(new EmptyBorder(0, 0, PADDING_SIZE, 0));
-        main.add(lReview);
-        main.add(review);
+        JPanel reviewPanel = new JPanel(new BorderLayout());
+        reviewPanel.add(lReview, BorderLayout.NORTH);
+        reviewPanel.add(review, BorderLayout.CENTER);
+        main.add(reviewPanel);
         main.setBorder(new EmptyBorder(PADDING_SIZE, PADDING_SIZE, PADDING_SIZE, PADDING_SIZE));
 
         MovieReview movieReview = null;
