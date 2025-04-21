@@ -1,4 +1,4 @@
-package movierating.entities;
+package movierating.db.entities;
 
 import java.util.ArrayList;
 

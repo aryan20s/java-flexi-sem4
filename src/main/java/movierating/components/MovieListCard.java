@@ -1,8 +1,9 @@
 package movierating.components;
 
-import movierating.entities.Movie;
+import movierating.db.entities.Movie;
 import movierating.pages.HomePage;
 import movierating.pages.MovieInfoPage;
+import movierating.utils.Utils;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -11,9 +12,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-import static movierating.utils.Constants.*;
-
-public class MovieListCard extends Card {
+public class MovieListCard extends BaseCard {
     private final Movie movie;
     private final HomePage homePage;
     private static final BufferedImage ICON_IMAGE;
@@ -42,20 +41,9 @@ public class MovieListCard extends Card {
         details.setOpaque(false);
         details.setLayout(new BoxLayout(details, BoxLayout.Y_AXIS));
 
-        JLabel lMovieName = new JLabel(this.movie.getMovieName());
-        lMovieName.setFont(ARIAL.deriveFont(24.0F));
-        lMovieName.setForeground(Color.BLACK);
-        lMovieName.setOpaque(false);
-
-        JLabel lMovieRating = new JLabel(this.movie.getMovieRating());
-        lMovieRating.setFont(ARIAL.deriveFont(16.0F));
-        lMovieRating.setForeground(Color.GRAY);
-        lMovieName.setOpaque(false);
-
-        JLabel lMovieGenre = new JLabel(this.movie.getMovieGenre());
-        lMovieGenre.setFont(ARIAL.deriveFont(16.0F));
-        lMovieGenre.setForeground(Color.GRAY);
-        lMovieName.setOpaque(false);
+        JLabel lMovieName = Utils.createLabel(this.movie.getMovieName(), 24.0F, Color.BLACK);
+        JLabel lMovieRating = Utils.createLabel(this.movie.getMovieRating(), 16.0F, Color.GRAY);
+        JLabel lMovieGenre = Utils.createLabel(this.movie.getMovieGenre(), 16.0F, Color.GRAY);
 
         details.add(lMovieName);
         details.add(lMovieGenre);
@@ -65,8 +53,6 @@ public class MovieListCard extends Card {
 
     @Override
     public void onClicked() {
-        System.out.println(this.movie.getMovieName() + " clicked.");
-
         SwingUtilities.invokeLater(() -> {
             new MovieInfoPage(this.movie);
             homePage.dispose();

@@ -1,8 +1,9 @@
 package movierating.components;
 
 import movierating.db.Database;
-import movierating.entities.Movie;
-import movierating.entities.MovieReview;
+import movierating.db.entities.Movie;
+import movierating.db.entities.MovieReview;
+import movierating.utils.Utils;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -14,10 +15,10 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import static movierating.utils.Constants.ARIAL;
 import static movierating.utils.Constants.PADDING_SIZE;
 
-public class MovieReviewsCard extends Card {
+public class MovieReviewsCard extends BaseCard {
+    private static final int REVIEW_HEIGHT = 100;
     private final Movie movie;
     private static final BufferedImage ICON_IMAGE;
 
@@ -32,7 +33,7 @@ public class MovieReviewsCard extends Card {
     public MovieReviewsCard(Movie movie) {
         this.C_WIDTH = 750;
         this.movie = movie;
-        this.shouldHoverDarken = false;
+        this.isClickable = false;
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.setBorder(new EmptyBorder(PADDING_SIZE, PADDING_SIZE - 1, PADDING_SIZE, PADDING_SIZE - 1));
@@ -41,41 +42,30 @@ public class MovieReviewsCard extends Card {
     }
 
     private JPanel getMovieReviews() {
-        ArrayList<MovieReview> reviews = new ArrayList<>();
+        ArrayList<MovieReview> reviews;
         try {
             reviews = Database.getMovieReviews(this.movie);
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
 
         JPanel main = new JPanel();
-        this.C_HEIGHT = 100 * reviews.size();
-        main.setLayout(new GridLayout(reviews.size(), 1, 10, 10));
+        this.C_HEIGHT = REVIEW_HEIGHT * reviews.size();
+        main.setLayout(new GridLayout(reviews.size(), 1, PADDING_SIZE, PADDING_SIZE));
         main.setOpaque(false);
         for (MovieReview review: reviews) {
             JPanel details = new JPanel();
             details.setOpaque(false);
             details.setLayout(new BoxLayout(details, BoxLayout.Y_AXIS));
 
-            JLabel lPersonName = new JLabel(review.getPersonName());
-            lPersonName.setFont(ARIAL.deriveFont(24.0F));
-            lPersonName.setForeground(Color.BLACK);
-            lPersonName.setOpaque(false);
-
-            JLabel lRating = new JLabel("♥ " + review.getRating());
-            lRating.setFont(ARIAL.deriveFont(20.0F));
-            lRating.setForeground(Color.GRAY);
-            lRating.setOpaque(false);
-
-
             String reviewText = review.getReviewText();
             if (reviewText == null || reviewText.isEmpty()) {
                 reviewText = "N/A";
             }
-            JLabel lReviewText = new JLabel(reviewText);
-            lReviewText.setFont(ARIAL.deriveFont(16.0F));
-            lReviewText.setForeground(Color.GRAY);
-            lReviewText.setOpaque(false);
+
+            JLabel lPersonName = Utils.createLabel(review.getPersonName(), 24.0F, Color.BLACK);
+            JLabel lRating = Utils.createLabel("♥ " + review.getRating(), 20.0F, Color.GRAY);
+            JLabel lReviewText = Utils.createLabel(reviewText, 20.0F, Color.GRAY);
 
             details.add(lPersonName);
             details.add(lRating);
@@ -85,5 +75,10 @@ public class MovieReviewsCard extends Card {
         }
 
         return main;
+    }
+
+    @Override
+    public void onClicked() {
+
     }
 }

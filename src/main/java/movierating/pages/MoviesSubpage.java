@@ -2,7 +2,7 @@ package movierating.pages;
 
 import movierating.components.MovieListCard;
 import movierating.db.Database;
-import movierating.entities.Movie;
+import movierating.db.entities.Movie;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -31,7 +31,7 @@ public class MoviesSubpage {
                 moviesList.add(new MovieListCard(movie, homePage));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
 
         return moviesList;

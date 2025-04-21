@@ -1,9 +1,9 @@
-package movierating.entities;
+package movierating.db.entities;
 
-public class MovieStaff {
+public class MovieActor {
     private final String name, role;
 
-    public MovieStaff(String name, String role) {
+    public MovieActor(String name, String role) {
         this.name = name;
         this.role = role;
     }

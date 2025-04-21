@@ -1,4 +1,4 @@
-package movierating.entities;
+package movierating.db.entities;
 
 public class MovieReview {
     private final String personName, reviewText;

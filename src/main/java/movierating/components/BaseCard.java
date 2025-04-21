@@ -10,20 +10,25 @@ import java.awt.geom.RoundRectangle2D;
 import static movierating.utils.Constants.CORNER_RADIUS;
 import static movierating.utils.Constants.STROKE_WIDTH;
 
-public class Card extends JPanel {
+public abstract class BaseCard extends JPanel implements CardClickHandler {
     protected int C_WIDTH;
     protected int C_HEIGHT;
-    protected boolean shouldHoverDarken = true;
+    protected boolean isClickable = true;
     private boolean isMouseHovered = false;
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+
+        if (this.isClickable) {
+            this.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        }
+
         Graphics2D g2 = (Graphics2D) g;
         RenderingHints hints = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setRenderingHints(hints);
 
-        g2.setColor((isMouseHovered && shouldHoverDarken) ? Color.WHITE.darker() : Color.WHITE);
+        g2.setColor((isMouseHovered && isClickable) ? Color.WHITE.darker() : Color.WHITE);
         g2.setStroke(new BasicStroke(0.1F));
         RoundRectangle2D rect = new RoundRectangle2D.Double(
             STROKE_WIDTH / 2.0,
@@ -48,11 +53,11 @@ public class Card extends JPanel {
         g2.draw(rect);
     }
 
-    public Card() {
+    public BaseCard() {
         this.C_WIDTH = 850;
         this.C_HEIGHT = 125;
 
-        Card thisW = this;
+        BaseCard thisW = this;
         this.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 thisW.isMouseHovered = true;
@@ -69,10 +74,6 @@ public class Card extends JPanel {
                 thisW.onClicked();
             }
         });
-    }
-
-    public void onClicked() {
-        System.out.println("Clicked");
     }
 
     @Override
