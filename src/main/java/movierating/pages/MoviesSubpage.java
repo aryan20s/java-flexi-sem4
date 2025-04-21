@@ -1,30 +1,39 @@
 package movierating.pages;
 
-import movierating.components.MovieCard;
+import movierating.components.MovieListCard;
+import movierating.db.Database;
+import movierating.entities.Movie;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 import static movierating.utils.Constants.PADDING_SIZE;
 
 public class MoviesSubpage {
-    public static JComponent makeMoviesSubpage() {
-        JPanel moviesList = getMoviesList();
+    public static JComponent makeMoviesSubpage(HomePage homePage) {
+        JPanel moviesList = getMoviesList(homePage);
         JScrollPane scrollPane = new JScrollPane(moviesList);
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
         return scrollPane;
     }
 
-    private static JPanel getMoviesList() {
+    private static JPanel getMoviesList(HomePage homePage) {
         JPanel moviesList = new JPanel();
         moviesList.setLayout(new GridLayout(5, 1, PADDING_SIZE, PADDING_SIZE));
         moviesList.setBorder(new EmptyBorder(PADDING_SIZE, PADDING_SIZE - 1, PADDING_SIZE, PADDING_SIZE - 1));
-        moviesList.add(new MovieCard("Action", "♥ 4.3", "Name 1"));
-        moviesList.add(new MovieCard("Thriller", "♥ 4.1", "Name 2"));
-        moviesList.add(new MovieCard("Kids", "♥ 3.7", "Name 3"));
-        moviesList.add(new MovieCard("Comedy", "♥ 4.2", "Name 4"));
-        moviesList.add(new MovieCard("Sci-Fi", "♥ 4.6", "Name 5"));
+
+        try {
+            ArrayList<Movie> movies = Database.getAllMovies();
+            for (Movie movie: movies) {
+                moviesList.add(new MovieListCard(movie, homePage));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         return moviesList;
     }
 }

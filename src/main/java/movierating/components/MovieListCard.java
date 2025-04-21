@@ -1,5 +1,9 @@
 package movierating.components;
 
+import movierating.entities.Movie;
+import movierating.pages.HomePage;
+import movierating.pages.MovieInfoPage;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -9,8 +13,9 @@ import java.io.IOException;
 
 import static movierating.utils.Constants.*;
 
-public class MovieCard extends Card {
-    private final String movieName, movieRating, movieGenre;
+public class MovieListCard extends Card {
+    private final Movie movie;
+    private final HomePage homePage;
     private static final BufferedImage ICON_IMAGE;
 
     static {
@@ -21,10 +26,9 @@ public class MovieCard extends Card {
         }
     }
 
-    public MovieCard(String movieGenre, String movieRating, String movieName) {
-        this.movieGenre = movieGenre;
-        this.movieRating = movieRating;
-        this.movieName = movieName;
+    public MovieListCard(Movie movie, HomePage homePage) {
+        this.movie = movie;
+        this.homePage = homePage;
 
         this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         this.setOpaque(false);
@@ -38,17 +42,17 @@ public class MovieCard extends Card {
         details.setOpaque(false);
         details.setLayout(new BoxLayout(details, BoxLayout.Y_AXIS));
 
-        JLabel lMovieName = new JLabel(this.movieName);
+        JLabel lMovieName = new JLabel(this.movie.getMovieName());
         lMovieName.setFont(ARIAL.deriveFont(24.0F));
         lMovieName.setForeground(Color.BLACK);
         lMovieName.setOpaque(false);
 
-        JLabel lMovieRating = new JLabel(this.movieRating);
+        JLabel lMovieRating = new JLabel(this.movie.getMovieRating());
         lMovieRating.setFont(ARIAL.deriveFont(16.0F));
         lMovieRating.setForeground(Color.GRAY);
         lMovieName.setOpaque(false);
 
-        JLabel lMovieGenre = new JLabel(this.movieGenre);
+        JLabel lMovieGenre = new JLabel(this.movie.getMovieGenre());
         lMovieGenre.setFont(ARIAL.deriveFont(16.0F));
         lMovieGenre.setForeground(Color.GRAY);
         lMovieName.setOpaque(false);
@@ -61,6 +65,11 @@ public class MovieCard extends Card {
 
     @Override
     public void onClicked() {
-        System.out.println(this.movieName + " clicked.");
+        System.out.println(this.movie.getMovieName() + " clicked.");
+
+        SwingUtilities.invokeLater(() -> {
+            new MovieInfoPage(this.movie);
+            homePage.dispose();
+        });
     }
 }

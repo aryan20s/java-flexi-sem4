@@ -11,7 +11,9 @@ import static movierating.utils.Constants.CORNER_RADIUS;
 import static movierating.utils.Constants.STROKE_WIDTH;
 
 public class Card extends JPanel {
-    public static final int C_WIDTH = 850, C_HEIGHT = 125;
+    protected int C_WIDTH;
+    protected int C_HEIGHT;
+    protected boolean shouldHoverDarken = true;
     private boolean isMouseHovered = false;
 
     @Override
@@ -21,7 +23,7 @@ public class Card extends JPanel {
         RenderingHints hints = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setRenderingHints(hints);
 
-        g2.setColor(isMouseHovered ? Color.WHITE.darker() : Color.WHITE);
+        g2.setColor((isMouseHovered && shouldHoverDarken) ? Color.WHITE.darker() : Color.WHITE);
         g2.setStroke(new BasicStroke(0.1F));
         RoundRectangle2D rect = new RoundRectangle2D.Double(
             STROKE_WIDTH / 2.0,
@@ -47,6 +49,9 @@ public class Card extends JPanel {
     }
 
     public Card() {
+        this.C_WIDTH = 850;
+        this.C_HEIGHT = 125;
+
         Card thisW = this;
         this.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {

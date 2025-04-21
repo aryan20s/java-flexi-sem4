@@ -11,7 +11,7 @@ public class HomePage extends JFrame {
     public static final int W_WIDTH = 900, W_HEIGHT = 600;
 
     public HomePage() {
-        this.setTitle("Movie Booking App");
+        this.setTitle("Home");
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setLayout(new BorderLayout());
         this.setSize(W_WIDTH, W_HEIGHT);
@@ -22,7 +22,7 @@ public class HomePage extends JFrame {
         JPanel navBar = new JPanel(new BorderLayout());
         JPanel buttonsPanel = new JPanel();
 
-        mainPanel.add(MoviesSubpage.makeMoviesSubpage(), "Movies");
+        mainPanel.add(MoviesSubpage.makeMoviesSubpage(this), "Movies");
         mainPanel.add(BookingsSubpage.makeBookingsSubpage(), "My Bookings");
 
         JButton b1 = makePageButton("Movies", mainPanel);
