@@ -98,13 +98,11 @@ public class ReviewingPage extends JFrame {
         submitButton.addActionListener(e -> {
             String reviewAmt = rating.getText();
             String reviewText = review.getText();
-            double amt = 0.0D;
+            double amt = -1.0D;
 
-            boolean amtSuccess = true;
             try {
                 amt = Double.parseDouble(reviewAmt);
-            } catch (NumberFormatException ex) {
-                amtSuccess = false;
+            } catch (NumberFormatException ignored) {
             }
 
             if (amt < 0.0 || amt > 10.0) {
