@@ -70,7 +70,7 @@ public class ShowsPage extends JFrame {
 
             int showNum = 1;
             for (Show show: shows) {
-                showsList.add(new ShowListCard(show, showNum, this));
+                showsList.add(new ShowListCard(show, showNum++, this));
                 showsList.add(Box.createRigidArea(new Dimension(0, PADDING_SIZE)));
             }
         } catch (SQLException e) {
