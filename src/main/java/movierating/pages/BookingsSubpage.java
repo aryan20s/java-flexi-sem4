@@ -8,6 +8,7 @@ import movierating.db.entities.Movie;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -23,19 +24,24 @@ public class BookingsSubpage {
     }
 
     private static JPanel getBookingsList(HomePage homePage) {
+        JPanel list = new JPanel();
+        list.setLayout(new BorderLayout());
         JPanel bookingsList = new JPanel();
-        bookingsList.setLayout(new GridLayout(5, 1, PADDING_SIZE, PADDING_SIZE));
         bookingsList.setBorder(new EmptyBorder(PADDING_SIZE, PADDING_SIZE - 1, PADDING_SIZE, PADDING_SIZE - 1));
 
         try {
             ArrayList<Booking> bookings = Database.getAllBookings();
-            for (Booking booking: bookings) {
+            bookingsList.setLayout(new GridLayout(bookings.size(), 1, PADDING_SIZE, PADDING_SIZE));
+
+            for (Booking booking : bookings) {
                 bookingsList.add(new BookingsListCard(booking, homePage));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
-        return bookingsList;
+        list.add(bookingsList, BorderLayout.NORTH);
+
+        return list;
     }
 }

@@ -21,12 +21,15 @@ public class MoviesSubpage {
     }
 
     private static JPanel getMoviesList(HomePage homePage) {
+        JPanel list = new JPanel();
+        list.setLayout(new BorderLayout());
         JPanel moviesList = new JPanel();
-        moviesList.setLayout(new GridLayout(5, 1, PADDING_SIZE, PADDING_SIZE));
         moviesList.setBorder(new EmptyBorder(PADDING_SIZE, PADDING_SIZE - 1, PADDING_SIZE, PADDING_SIZE - 1));
 
         try {
             ArrayList<Movie> movies = Database.getAllMovies();
+            moviesList.setLayout(new GridLayout(movies.size(), 1, PADDING_SIZE, PADDING_SIZE));
+
             for (Movie movie: movies) {
                 moviesList.add(new MovieListCard(movie, homePage));
             }
@@ -34,6 +37,8 @@ public class MoviesSubpage {
             throw new RuntimeException(e);
         }
 
-        return moviesList;
+        list.add(moviesList, BorderLayout.NORTH);
+
+        return list;
     }
 }

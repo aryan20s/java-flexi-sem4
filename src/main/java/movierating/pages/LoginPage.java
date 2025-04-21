@@ -5,11 +5,13 @@ import movierating.db.Database;
 import movierating.utils.Utils;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.sql.SQLException;
 import java.util.Objects;
 
 import static movierating.utils.Constants.ACCENT_COLOR;
+import static movierating.utils.Constants.PADDING_SIZE;
 
 public class LoginPage extends JFrame {
     public static final int W_WIDTH = 400, W_HEIGHT = 200;
@@ -26,22 +28,13 @@ public class LoginPage extends JFrame {
         JPanel navBar = new JPanel();
         navBar.setBackground(ACCENT_COLOR);
         navBar.add(label);
-        this.add(navBar, BorderLayout.NORTH);
 
-        JPanel loginPanel = new JPanel();
-        loginPanel.setLayout(new GridLayout(2, 2));
-        loginPanel.setOpaque(false);
         JTextField usernameField = new JTextField();
         JTextField passwordField = new JTextField();
-        JLabel lUsername = Utils.createLabel("Username", 16.0F, Color.BLACK);
-        JLabel lPassword = Utils.createLabel("Password", 16.0F, Color.BLACK);
+        JLabel lUsername = Utils.createLabel("Username:  ", 16.0F, Color.BLACK);
+        JLabel lPassword = Utils.createLabel("Password:  ", 16.0F, Color.BLACK);
         lUsername.setAlignmentX(Component.CENTER_ALIGNMENT);
         lPassword.setAlignmentX(Component.CENTER_ALIGNMENT);
-        loginPanel.add(lUsername);
-        loginPanel.add(usernameField);
-        loginPanel.add(lPassword);
-        loginPanel.add(passwordField);
-        this.add(loginPanel, BorderLayout.CENTER);
 
         JButton loginButton = Utils.createButton("Enter");
         loginButton.addActionListener(e -> {
@@ -67,7 +60,32 @@ public class LoginPage extends JFrame {
             }
         });
 
-        this.add(loginButton, BorderLayout.SOUTH);
+        JPanel buttonPanel = new JPanel(new GridLayout(1, 3));
+        buttonPanel.add(Box.createRigidArea(new Dimension(0, 0)));
+        buttonPanel.add(loginButton);
+        buttonPanel.add(Box.createRigidArea(new Dimension(0, 0)));
+
+        JPanel fieldColumns = new JPanel();
+        fieldColumns.setLayout(new BoxLayout(fieldColumns, BoxLayout.X_AXIS));
+        fieldColumns.setBorder(new EmptyBorder(PADDING_SIZE, PADDING_SIZE, PADDING_SIZE, PADDING_SIZE));
+
+        JPanel labels = new JPanel();
+        labels.setLayout(new BoxLayout(labels, BoxLayout.Y_AXIS));
+        labels.add(lUsername);
+        labels.add(Box.createRigidArea(new Dimension(0, (PADDING_SIZE * 5) / 2)));
+        labels.add(lPassword);
+        JPanel fields = new JPanel();
+        fields.add(usernameField);
+        fields.add(Box.createRigidArea(new Dimension(0, PADDING_SIZE)));
+        fields.add(passwordField);
+        fields.setLayout(new BoxLayout(fields, BoxLayout.Y_AXIS));
+
+        fieldColumns.add(labels);
+        fieldColumns.add(fields);
+
+        this.add(navBar, BorderLayout.NORTH);
+        this.add(fieldColumns, BorderLayout.CENTER);
+        this.add(buttonPanel, BorderLayout.SOUTH);
 
         this.setVisible(true);
     }
