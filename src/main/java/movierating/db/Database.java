@@ -1,7 +1,9 @@
 package movierating.db;
 
 import movierating.entities.Movie;
+import movierating.entities.MovieActor;
 import movierating.entities.MovieReview;
+import movierating.entities.MovieStaff;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -36,7 +38,40 @@ public class Database {
             String movieGenre = rs.getString(3);
             String movieRating = "♥ " + rs.getDouble(4);
             int movieID = rs.getInt(5);
-            movies.add(new Movie(movieName, movieDescription, movieGenre, movieRating, movieID));
+
+            PreparedStatement ps = con.prepareStatement(
+                "SELECT p.Name, w.RoleInProduction " +
+                    "FROM Persons p " +
+                    "JOIN WorkedOn w " +
+                    "ON w.MovieStaffID = p.PersonID " +
+                    "WHERE MovieID = ?"
+            );
+            ps.setInt(1, movieID);
+
+            ResultSet rs2 = ps.executeQuery();
+
+            ArrayList<MovieStaff> movieStaff = new ArrayList<>();
+            while (rs2.next()) {
+                movieStaff.add(new MovieStaff(rs2.getString(1), rs2.getString(2)));
+            }
+
+            ps = con.prepareStatement(
+                "SELECT p.Name, a.CharacterPlayed " +
+                    "FROM Persons p " +
+                    "JOIN ActsIn a " +
+                    "ON a.ActorID = p.PersonID " +
+                    "WHERE MovieID = ?"
+            );
+            ps.setInt(1, movieID);
+
+            rs2 = ps.executeQuery();
+
+            ArrayList<MovieActor> movieActors = new ArrayList<>();
+            while (rs2.next()) {
+                movieActors.add(new MovieActor(rs2.getString(1), rs2.getString(2)));
+            }
+
+            movies.add(new Movie(movieName, movieDescription, movieGenre, movieRating, movieID, movieStaff, movieActors));
         }
 
         return movies;

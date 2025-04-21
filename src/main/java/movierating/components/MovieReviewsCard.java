@@ -30,8 +30,7 @@ public class MovieReviewsCard extends Card {
     }
 
     public MovieReviewsCard(Movie movie) {
-        this.C_HEIGHT = 300;
-
+        this.C_WIDTH = 750;
         this.movie = movie;
         this.shouldHoverDarken = false;
 
@@ -46,10 +45,11 @@ public class MovieReviewsCard extends Card {
         try {
             reviews = Database.getMovieReviews(this.movie);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
 
         JPanel main = new JPanel();
+        this.C_HEIGHT = 100 * reviews.size();
         main.setLayout(new GridLayout(reviews.size(), 1, 10, 10));
         main.setOpaque(false);
         for (MovieReview review: reviews) {
@@ -67,7 +67,12 @@ public class MovieReviewsCard extends Card {
             lRating.setForeground(Color.GRAY);
             lRating.setOpaque(false);
 
-            JLabel lReviewText = new JLabel(review.getReviewText());
+
+            String reviewText = review.getReviewText();
+            if (reviewText == null || reviewText.isEmpty()) {
+                reviewText = "N/A";
+            }
+            JLabel lReviewText = new JLabel(reviewText);
             lReviewText.setFont(ARIAL.deriveFont(16.0F));
             lReviewText.setForeground(Color.GRAY);
             lReviewText.setOpaque(false);

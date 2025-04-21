@@ -1,6 +1,8 @@
 package movierating.components;
 
 import movierating.entities.Movie;
+import movierating.entities.MovieActor;
+import movierating.entities.MovieStaff;
 import movierating.pages.HomePage;
 import movierating.pages.MovieInfoPage;
 import movierating.utils.Utils;
@@ -29,17 +31,16 @@ public class MovieInfoCard extends Card {
     }
 
     public MovieInfoCard(Movie movie) {
-        this.C_HEIGHT = 300;
+        this.C_WIDTH = 750;
+        this.C_HEIGHT = 400;
 
         this.movie = movie;
         this.shouldHoverDarken = false;
 
-        this.setLayout(new GridLayout(2, 1));
+        this.setLayout(new GridLayout(1, 1));
         this.setBorder(new EmptyBorder(PADDING_SIZE, PADDING_SIZE - 1, PADDING_SIZE, PADDING_SIZE - 1));
         this.setOpaque(false);
         this.add(getMovieDetails());
-        JButton book = Utils.createButton("Book Ticket");
-        this.add(book);
     }
 
     private JPanel getMovieDetails() {
@@ -71,6 +72,46 @@ public class MovieInfoCard extends Card {
         details.add(lMovieGenre);
         details.add(lMovieRating);
         details.add(lMovieDesc);
+
+        details.add(Box.createRigidArea(new Dimension(0, PADDING_SIZE)));
+        JLabel lStarring = new JLabel("Starring:");
+        lStarring.setFont(ARIAL.deriveFont(18.0F));
+        lStarring.setForeground(Color.DARK_GRAY);
+        lStarring.setOpaque(false);
+        details.add(lStarring);
+        for (MovieActor actor: movie.getMovieActors()) {
+            JLabel lActor = new JLabel(actor.getName() + " as " + actor.getRole());
+            lActor.setFont(ARIAL.deriveFont(16.0F));
+            lActor.setForeground(Color.GRAY);
+            lActor.setOpaque(false);
+            details.add(lActor);
+        }
+
+        details.add(Box.createRigidArea(new Dimension(0, PADDING_SIZE)));
+        JLabel lStaff = new JLabel("Staff:");
+        lStaff.setFont(ARIAL.deriveFont(18.0F));
+        lStaff.setForeground(Color.DARK_GRAY);
+        lStaff.setOpaque(false);
+        details.add(lStaff);
+        for (MovieStaff staff: movie.getMovieStaff()) {
+            JLabel lActor = new JLabel(staff.getName() + " as " + staff.getRole());
+            lActor.setFont(ARIAL.deriveFont(16.0F));
+            lActor.setForeground(Color.GRAY);
+            lActor.setOpaque(false);
+            details.add(lActor);
+        }
+
+        JPanel p1 = new JPanel();
+        p1.setLayout(new BorderLayout());
+        JPanel panel = new JPanel();
+        p1.setOpaque(false);
+        panel.setOpaque(false);
+        panel.setMaximumSize(new Dimension(10000, 50));
+        JButton book = Utils.createButton("Book");
+        book.setMaximumSize(new Dimension(10, 10));
+        panel.add(book);
+        p1.add(panel, BorderLayout.SOUTH);
+        details.add(p1);
         return details;
     }
 }

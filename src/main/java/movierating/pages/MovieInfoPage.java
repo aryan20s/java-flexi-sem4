@@ -2,6 +2,7 @@ package movierating.pages;
 
 import movierating.components.MovieInfoCard;
 import movierating.components.MovieReviewsCard;
+import movierating.components.WriteReviewCard;
 import movierating.entities.Movie;
 import movierating.utils.Utils;
 
@@ -27,10 +28,13 @@ public class MovieInfoPage extends JFrame {
         JPanel buttonsPanel = new JPanel();
 
         JPanel page = new JPanel();
-        page.setLayout(new GridLayout(2, 1, 10, 10));
+        page.setLayout(new BoxLayout(page, BoxLayout.Y_AXIS));
         page.setBorder(new EmptyBorder(PADDING_SIZE, PADDING_SIZE - 1, PADDING_SIZE, PADDING_SIZE - 1));
         page.add(new MovieInfoCard(movie));
+        page.add(Box.createRigidArea(new Dimension(0, PADDING_SIZE)));
         page.add(new MovieReviewsCard(movie));
+        page.add(Box.createRigidArea(new Dimension(0, PADDING_SIZE)));
+        page.add(new WriteReviewCard(movie));
 
         JButton backButton = Utils.createButton("Back");
         JFrame thisW = this;
@@ -48,7 +52,15 @@ public class MovieInfoPage extends JFrame {
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
         this.add(navBar, BorderLayout.NORTH);
         this.add(scrollPane, BorderLayout.CENTER);
+        scrollPane.getViewport().setViewPosition(new Point(0,0));
 
         this.setVisible(true);
+        scrollPane.getViewport().setViewPosition(new Point(0,0));
+
+        new Thread(() -> {
+            SwingUtilities.invokeLater(() -> {
+                scrollPane.getViewport().setViewPosition(new Point(0, 0));
+            });
+        }).start();
     }
 }
