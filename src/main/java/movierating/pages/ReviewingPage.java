@@ -133,19 +133,19 @@ public class ReviewingPage extends JFrame {
             try {
                 boolean success;
                 if (finalMovieReview == null) {
-                     success = Database.writeMovieReview(new MovieReview(
+                     success = new MovieReview(
                         Main.CURRENT_USER.getUsername(),
                         reviewText,
                         this.booking.getShow().getMovie(),
                         amt
-                    ));
+                     ).insert();
                 } else {
-                    success = Database.updateMovieReview(new MovieReview(
+                    success = new MovieReview(
                         Main.CURRENT_USER.getUsername(),
                         reviewText,
                         this.booking.getShow().getMovie(),
                         amt
-                    ));
+                    ).update();
                 }
 
                 if (success) {

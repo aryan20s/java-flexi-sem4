@@ -53,7 +53,7 @@ public class BookingsListCard extends BaseCard {
                     null, "Are you sure you want to cancel your booking?",
                     "Confirmation", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION
                 ) {
-                    Database.deleteBookingAndReviews(this.booking);
+                    this.booking.delete();
                     SwingUtilities.invokeLater(() -> {
                         this.homePage.refreshContents();
                     });
@@ -88,6 +88,7 @@ public class BookingsListCard extends BaseCard {
 
         if (movieReview != null) {
             writeReview.setText("Update Review");
+            buttons.remove(cancelBooking);
         }
 
         this.add(main);

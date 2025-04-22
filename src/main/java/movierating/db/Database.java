@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Database {
-    private static Connection con;
+    public static Connection con;
 
     public static void init() throws SQLException {
         con = DriverManager.getConnection(
@@ -271,17 +271,7 @@ public class Database {
             }
         }
 
-        PreparedStatement ps = con.prepareStatement(
-            "INSERT INTO Bookings VALUES (" +
-                    "?, ?, ?" +
-                ")"
-        );
-
-        ps.setInt(1, bookingID);
-        ps.setInt(2, showID);
-        ps.setInt(3, personID);
-
-        return ps.executeUpdate() != 0; // if 0 rows set then failed
+        return new Booking(bookingID, show).insert();
     }
 
     public static ArrayList<Booking> getAllBookings() throws SQLException {
@@ -324,56 +314,5 @@ public class Database {
             review = new MovieReview(personName, reviewText, movie, rating);
         }
         return review;
-    }
-
-    public static boolean writeMovieReview(MovieReview review) throws SQLException {
-        int userID = Main.CURRENT_USER.getPersonID();
-        int movieID = review.getMovie().getMovieID();
-
-        PreparedStatement st = con.prepareStatement(
-            "INSERT INTO MovieReview (UserID, MovieID, MovieScore, ReviewText) VALUES (?, ?, ?, ?)"
-        );
-        st.setInt(1, userID);
-        st.setInt(2, movieID);
-        st.setDouble(3, review.getRating());
-        st.setString(4, review.getReviewText());
-
-        return st.executeUpdate() > 0;
-    }
-
-    public static boolean updateMovieReview(MovieReview review) throws SQLException {
-        int userID = Main.CURRENT_USER.getPersonID();
-        int movieID = review.getMovie().getMovieID();
-
-        PreparedStatement st = con.prepareStatement(
-            "UPDATE MovieReview SET MovieScore = ?, ReviewText = ? " +
-                "WHERE UserID = ? AND MovieID = ?"
-        );
-        st.setDouble(1, review.getRating());
-        st.setString(2, review.getReviewText());
-        st.setInt(3, userID);
-        st.setInt(4, movieID);
-
-        return st.executeUpdate() > 0;
-    }
-
-    public static boolean deleteBookingAndReviews(Booking booking) throws SQLException {
-        int userID = Main.CURRENT_USER.getPersonID();
-        int movieID = booking.getShow().getMovie().getMovieID();
-        int bookingID = booking.getBookingID();
-
-        PreparedStatement stReview = con.prepareStatement(
-            "DELETE FROM MovieReview WHERE UserID = ? AND MovieID = ?"
-        );
-        stReview.setInt(1, userID);
-        stReview.setInt(2, movieID);
-        stReview.executeUpdate();
-
-        PreparedStatement stBooking = con.prepareStatement(
-            "DELETE FROM Bookings WHERE BookingID = ?"
-        );
-        stBooking.setInt(1, bookingID);
-
-        return stBooking.executeUpdate() > 0;
     }
 }
